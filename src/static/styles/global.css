@@ -184,3 +184,37 @@ textarea {
         font-size: 1.1rem;
     }
 }
+
+.message-container {
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 5px;
+    box-shadow: 0 5px 12.5px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    margin: 20px 0;
+    width: 100%;
+    max-width: 800px;
+    position: relative;
+    overflow: hidden;
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+.message-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 7.5px 15px rgba(0, 0, 0, 0.15);
+}
+
+.message-container::before {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(
+        45deg,
+        rgba(255, 182, 193, 0.1),
+        rgba(255, 107, 157, 0.1)
+    );
+    border-radius: 0 0 0 80px;
+}

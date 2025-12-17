@@ -31,7 +31,7 @@ _ = FlaskUUID(app)
 limiter = Limiter(
     get_remote_address,
     app=app,
-    default_limits=["200 per day"],
+    default_limits=["200 per day", "50 per hour"],
     storage_uri="memory://",
 )
 
@@ -49,6 +49,7 @@ def form():
 
 
 @app.post("/submit")
+@limiter.limit("50 per day")
 def submit():
     if not request.is_json:
         return "415 Unsupported Media Type", 415
@@ -127,4 +128,14 @@ def edit():
 def all():
     if not ADMIN_PASSWORD:
         return "403 Forbidden", 403
-    return "TODO"
+
+    if not (password := request.args.get("password")):
+        return render_template("all.html", auth=False)
+
+    if password.strip() != ADMIN_PASSWORD:
+        return render_template("all.html", auth=False)
+
+    query = select(db.Message)
+    messages = db.session.scalars(query)
+
+    return render_template("all.html", auth=True, messages=messages)
